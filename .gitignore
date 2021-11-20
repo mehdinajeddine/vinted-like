@@ -1,0 +1,4 @@
+node_modules
+utils/configCloudinary.js
+.env
+package-lock.json
