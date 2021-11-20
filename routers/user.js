@@ -29,11 +29,10 @@ userRoutes.post("/user/signup", async (req, res) => {
   const salt = tokens.generateSalt();
   const hash = tokens.generateHash(password + salt);
   const token = tokens.generateToken();
-  let pic;
-  //console.log("--> ", req.files.avatar.path);
+  //let pic;
 
   try {
-    pic = await cloudinary.uploader.upload(req.files.avatar.path, {
+    const pic = await cloudinary.uploader.upload(req.files.avatar.path, {
       folder: "vinted/user",
     });
   } catch (error) {
