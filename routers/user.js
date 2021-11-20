@@ -40,8 +40,6 @@ userRoutes.post("/user/signup", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 
-  res.status(200).json({ message: "good" });
-
   const newUser = new User({
     email: email,
     account: {
