@@ -36,14 +36,13 @@ userRoutes.post("/user/signup", async (req, res) => {
     const pic = await cloudinary.uploader.upload(req.files.avatar.path, {
       folder: "vinted/user",
     });
-    res.status(200).json(pic);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 
   res.status(200).json({ message: "good" });
 
-  /*const newUser = new User({
+  const newUser = new User({
     email: email,
     account: {
       username: req.fields.username,
@@ -59,7 +58,7 @@ userRoutes.post("/user/signup", async (req, res) => {
     res.status(200).json(newUser);
   } catch (error) {
     res.status(500).json(error.message);
-  }*/
+  }
 });
 
 userRoutes.post("/user/login", async (req, res) => {
