@@ -20,20 +20,25 @@ const checkEmailFormat = (email) => {
 userRoutes.post("/user/signup", async (req, res) => {
   const email = req.fields.email;
   const password = req.fields.password;
-  const salt = tokens.generateSalt();
-  const hash = tokens.generateHash(password + salt);
-  const token = tokens.generateToken();
-  try {
-    const pic = await cloudinary.uploader.upload(req.files.avatar.path, {
-      folder: "vinted/user/",
-    });
-  } catch (error) {
-    res.status(500).json({ message: "Erreur lors de chargement de l'avatar." });
-  }
 
   if (!checkEmailFormat(email)) {
     res.status(403).json(`Email format is not good`);
     return;
+  }
+
+  const salt = tokens.generateSalt();
+  const hash = tokens.generateHash(password + salt);
+  const token = tokens.generateToken();
+  //let pic = {};
+  //console.log("--> ", req.files.avatar.path);
+
+  try {
+    const pic = await cloudinary.uploader.upload(req.files.avatar.path, {
+      folder: "vinted/user",
+    });
+    res.status(200).json(pic);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 
   const newUser = new User({
