@@ -2,6 +2,9 @@ const moongoose = require("mongoose");
 const User = require("../models/User");
 
 const isAuthenticated = async (req, res, next) => {
+  if (!req.headers.authorization) {
+    res.status(401).json({ message: "User not Found" });
+  }
   const token = req.headers.authorization.replace("Bearer ", "");
   const existingUser = await User.findOne({ token: token });
   if (!existingUser) {
