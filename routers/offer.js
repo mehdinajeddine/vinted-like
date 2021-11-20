@@ -27,14 +27,22 @@ offerRoutes.post("/offer/publish", isAuthenticated, async (req, res) => {
     ],
     owner: req.user,
   });
-  await newOffer.save();
-  const pic = await cloudinary.uploader.upload(req.files.picture.path, {
-    folder: "vinted/offers/",
-    public_id: newOffer._id,
-  });
-  newOffer.product_image = { secure_url: pic.secure_url };
-  await newOffer.save();
-  res.status(200).json(newOffer);
+  try {
+    const pic = await cloudinary.uploader.upload(req.files.picture.path, {
+      folder: "vinted/offers/",
+      public_id: newOffer._id,
+    });
+    newOffer.product_image = { secure_url: pic.secure_url };
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+
+  try {
+    await newOffer.save();
+    res.status(200).json(newOffer);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 });
 
 offerRoutes.get("/offers", async (req, res) => {
